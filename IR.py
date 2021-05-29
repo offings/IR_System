@@ -1,6 +1,7 @@
 import re
 
 Josa = [] # Make Josa List
+document = [] # total document spilt by doc_ID
 
 def make_Josa_list() : 
     with open('Josa.txt', 'r', encoding='utf-8') as f :
@@ -10,10 +11,9 @@ def make_Josa_list() :
     Josa.sort(key=len, reverse=True) # Sort with String Length
 
 def clean_text() :
-    text = '<title>1. 지미 카터</title> 지미 카터는 민주당 출신 미국 39번째 대통령이다. 지미 카터는 조지아 주 한 마을에서 태어났다. 조지아 공과대학교를 졸업하였다. 그 후 해군에 들어가 전함·원자력·잠수함의 승무원으로 일하였다. '
     special_character_list = '[.,《》()·<>\'\"]'
     repl = ' '
-    text = re.sub(special_character_list, repl, text)
+    text = re.sub(special_character_list, repl, document[73])
     return text
 
 def Tokenizer(string) :
@@ -27,7 +27,21 @@ def sub_Josa(str_list) :
     for s in str_list :
         check = 0 # Check that remove Josa
         for j in Josa :
-            if s[-len(j):] == j : # If Josa is in Token
+            if s[-len(j):] == j and len(s) != 1 : # If Josa is in Token
+                if s[-len(j):] == "로" :
+                    if s == "프로" :
+                        sub_josa_list.append(s)
+                        check = 1
+                        break
+                if s[-len(j):] == "도" :
+                    if len(s[0:-len(j)]) <= 1 :
+                        sub_josa_list.append(s)
+                        check = 1
+                        break
+                    else :
+                        sub_josa_list.append(s[0:-len(j)])  # Append subtract token in final list
+                        check = 1
+                        break
                 sub_josa_list.append(s[0:-len(j)]) # Append subtract token in final list
                 check = 1
                 break
@@ -38,7 +52,6 @@ def sub_Josa(str_list) :
 def split_document():
     f = open('corpus.txt', 'r', encoding='utf-8')
     document_str = '' # string of one document
-    document = [] # total document spilt by doc_ID
 
     while True:
         line = f.readline()
@@ -58,5 +71,6 @@ def split_document():
             document_str = document_str + line
     f.close
 
+split_document()
 make_Josa_list()
 print(sub_Josa(Tokenizer(clean_text())))
