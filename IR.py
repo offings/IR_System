@@ -3,7 +3,7 @@ import math
 
 Josa = [] # Make Josa List
 document = [] # total document spilt by doc_ID
-dictionary = [] # [term, [[docID, weight] [docID, weight], ... ]]
+dictionary = [] # [term, [docID, weight] [docID, weight], ... ]
 q_list = []
 
 def make_Josa_list() : 
@@ -14,7 +14,7 @@ def make_Josa_list() :
     Josa.sort(key=len, reverse=True) # Sort with String Length
 
 def clean_text(document) :
-    special_character_list = '[.,《》()·<>\'\"]'
+    special_character_list = '[.,《》()·<>\'\"~‘’“”「」]'
     repl = ' '
     text = re.sub(special_character_list, repl, document)
     return text
@@ -186,11 +186,12 @@ def query(string) :
         elif q_list[i] in find_list:
             # docID가 기존것이랑 일치하면 아무것도 안 하고,
             index = find_list.index(q_list[i])
-            dictionary[index].append([docID, q_list.count(q_list[i])])
+            if docID != dictionary[index][len(dictionary[index]) - 1][0] :
+                dictionary[index].append([docID, q_list.count(q_list[i])])
 
 def calc_score() :
     score = [0]*100
-    for i in range(len(dictionary)-1) :
+    for i in range(len(dictionary)) :
         for j in range(len(q_list)) :
             if q_list[j] == dictionary[i][0] :
                 for k in range(2, len(dictionary[i])-1):
@@ -217,11 +218,12 @@ def IR_system() :
 
 def ranking(score) :
     rank = []
-    for i in range(len(document) - 1) :
+    for i in range(len(document)) :
         rank.append([i+1, score[i]])
     rank.sort(key=lambda rank: rank[1], reverse=True)
+    print("<Ranking>")
     for i in range(5) :
-        print("document", rank[i][0] , ":", rank[i][1])
+        print(i+1, ". document", rank[i][0] , ":", rank[i][1])
 
 split_document()
 make_Josa_list()
