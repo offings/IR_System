@@ -149,7 +149,6 @@ def term_frequency():
     # tf[i][1] : [docID, frequency]
     # tf[i][1][0] : docID
     # tf[i][1][1] : frequency
-    # len(tf[i] - 1) :
     for i in range(len(dictionary)) :
         for j in range(len(dictionary[i]) - 2):
             dictionary[i][j+2][1] = 1 + math.log10(dictionary[i][j+2][1])
@@ -208,6 +207,7 @@ def query(string) :
 def query_tfidf():
     query_index = 101
     # calculate query wt
+    q_list.sort()
     for i in range(len(dictionary)):
         for j in range(len(q_list)):
             if dictionary[i][0] == q_list[j]:
@@ -215,6 +215,7 @@ def query_tfidf():
                     if dictionary[i][k][0] == query_index:
                         dictionary[i][k][1] = dictionary[i][1] * dictionary[i][k][1]
                         q_tfidf.append([q_list[j], dictionary[i][k][1]])
+
     # calculate query length
     q_square = 0
     for i in range(len(q_tfidf)):
