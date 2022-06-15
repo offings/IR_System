@@ -16,3 +16,5 @@
 * Query와 Document 사이 Score를 계산하고 상위 Rank 표시
 
 ## 프로젝트 구현 결과
+![정보검색](https://user-images.githubusercontent.com/39369255/173773104-6b5f5e69-b429-41b6-acec-b8471cb50cc7.png)
+
